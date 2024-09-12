@@ -25,6 +25,6 @@ runcmd:
   - sudo chmod +x hst-install.sh
   - su - newuser
   - mkdir ~/install && cd ~/install 
-  - curl -fsSL https://raw.githubusercontent.com/alchemizt/hcp_cloud_init/main/setup.sh
+  - curl -fsSL https://raw.githubusercontent.com/alchemizt/vps_setup_hestia/main/setup.sh
   - chmod +x ./setup.sh
   - sudo bash ./setup.sh 
