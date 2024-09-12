@@ -1,0 +1,30 @@
+#cloud-config
+users:
+  - name: newuser    # Replace 'newuser' with your desired username
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']  # Grants sudo privileges without a password prompt
+    groups: sudo
+    shell: /bin/bash
+    ssh-authorized-keys:
+      - ssh-rsa AAAAB3Nza...    # Replace with the actual public SSH key from DigitalOcean's stored keys
+
+package_update: true  # Update the package lists
+package_upgrade: true  # Upgrade all packages
+
+packages:
+  - software-properties-common
+  - wget
+  - curl
+  - mc
+  - build-essential
+  - file
+  - git
+  - git-core
+runcmd:
+  - sudo apt-get update
+  - wget https://raw.githubusercontent.com/hestiacp/hestiacp/release/install/hst-install.sh
+  - sudo chmod +x hst-install.sh
+  - su - newuser
+  - mkdir ~/install && cd ~/install 
+  - curl -fsSL https://raw.githubusercontent.com/alchemizt/hcp_cloud_init/main/setup.sh
+  - chmod +x ./setup.sh
+  - sudo bash ./setup.sh 
