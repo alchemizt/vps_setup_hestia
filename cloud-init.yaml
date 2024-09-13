@@ -19,12 +19,11 @@ packages:
   - file
   - git
   - git-core
+
 runcmd:
-  - sudo apt-get update
   - wget https://raw.githubusercontent.com/hestiacp/hestiacp/release/install/hst-install.sh
-  - sudo chmod +x hst-install.sh
-  - su - newuser
-  - mkdir ~/install && cd ~/install 
-  - curl -fsSL https://raw.githubusercontent.com/alchemizt/vps_setup_hestia/main/setup.sh
-  - chmod +x ./setup.sh
-  - sudo bash ./setup.sh 
+  - chmod +x hst-install.sh
+  
+  # Create directory and run the setup script as the new user
+  - sudo -u newuser mkdir -p /home/newuser/install
+  - sudo -u newuser bash -c 'cd /home/newuser/install && curl -fsSL https://raw.githubusercontent.com/alchemizt/vps_setup_hestia/main/setup.sh -o setup.sh && chmod +x setup.sh && sudo bash ./setup.sh'

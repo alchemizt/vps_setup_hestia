@@ -1,4 +1,4 @@
-# hcp_cloud_init
+# VPS Setup Hestia
 A cloud init script for provisioning a VPS with HestiaCP 
 
 #VPS Setup Script
@@ -14,12 +14,19 @@ This repository contains a Bash script to automate the setup of a new VPS (Virtu
  - direnv Setup: Installs and configures direnv for managing environment variables.
 
 ##Prerequisites
- - A VPS running Ubuntu 22.04 or later.
- - Root or sudo access to the VPS.
- - Git must be installed on the VPS to clone this repository.
+ - doctl Installed on your local machine
 
 
 ##Installation
+
+NOTE: To get the fingerprints of your SSH keys from Digital Ocean, run this command:
+`doctl compute ssh-key list`
+
+To create the new droplet, run this command in the CLI
+`doctl compute droplet create <dropletname> --image ubuntu-22-04-x64 --size s-1vcpu-1gb --region nyc1 --ssh-keys <fingerprint>  --user-data-file cloud-init.yaml  --wait --enable-monitoring`
+
+This will run the following cloud init script
+
 ```yaml
 #cloud-config
 users:
@@ -42,19 +49,20 @@ packages:
   - file
   - git
   - git-core
+
 runcmd:
-  - sudo apt-get update
   - wget https://raw.githubusercontent.com/hestiacp/hestiacp/release/install/hst-install.sh
-  - sudo chmod +x hst-install.sh
-  - su - newuser
-  - mkdir ~/install && cd ~/install 
-  - curl -fsSL https://raw.githubusercontent.com/alchemizt/hcp_cloud_init/main/setup.sh
-  - chmod +x ./setup.sh
-  - sudo bash ./setup.sh 
+  - chmod +x hst-install.sh
+  
+  # Create directory and run the setup script as the new user
+  - sudo -u newuser mkdir -p /home/newuser/install
+  - sudo -u newuser bash -c 'cd /home/newuser/install && curl -fsSL https://raw.githubusercontent.com/alchemizt/vps_setup_hestia/main/setup.sh -o setup.sh && chmod +x setup.sh && sudo bash ./setup.sh'
+
 ```
 
+After it is complete, ssh to root@ip-addr. And run the HestiaCP installer.
 
-On creating your new Digital Ocean Droplet, add this cloud init script:
+`./hcp-install.sh`
 
 
 Contributing

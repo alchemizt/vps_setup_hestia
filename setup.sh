@@ -94,64 +94,6 @@ add_custom_functions() {
     add_to_shell_config "$func_string"
 }
 
-
-install_doctl() {
-  cd ~
-  wget https://github.com/digitalocean/doctl/releases/download/v1.110.0/doctl-1.110.0-linux-amd64.tar.gz
-  tar xf ~/doctl-1.110.0-linux-amd64.tar.gz
-  sudo mv ~/doctl /usr/local/bin
-}
-
-install_direnv() {
-
-  sudo apt-get install direnv 
-  echo export ENVTEST="Environment variables working" > .envrc
-  direnv allow .
-  direnv hook bash >> ~/.bashrc
-
-}
-
-install_cloudflared() {
-    curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloudflare-archive-keyring.gpg
-    echo "deb [signed-by=/usr/share/keyrings/cloudflare-archive-keyring.gpg] https://pkg.cloudflare.com/ cloudflare main" | sudo tee /etc/apt/sources.list.d/cloudflare.list
-    apt update
-    sudo apt install cloudflared
-}
-
-
-
-
-install_optional_software() {
-    echo "Optional software installation menu:"
-    options=("Install Docker" "Install Node.js" "Install Python 3.10" "Quit")
-    select opt in "${options[@]}"; do
-        case $opt in
-            "Install Docker")
-                echo "Installing Docker..."
-                sudo apt-get install -y docker.io
-                sudo systemctl enable --now docker
-                echo "Docker installed!"
-                ;;
-            "Install Node.js")
-                echo "Installing Node.js..."
-                sudo apt-get install -y nodejs npm
-                echo "Node.js installed!"
-                ;;
-            "Install Python 3.10")
-                echo "Installing Python 3.10..."
-                sudo apt-get install -y python3.10 python3.10-venv python3.10-dev
-                echo "Python 3.10 installed!"
-                ;;
-            "Quit")
-                break
-                ;;
-            *)
-                echo "Invalid option $REPLY"
-                ;;
-        esac
-    done
-}
-
 install_zsh() {
     echo "Installing ZSH..."
     sudo apt install zsh -y
@@ -160,7 +102,7 @@ install_zsh() {
 }
 
 # Script execution
+install_zsh
 add_aliases
 add_environment_variables
 add_custom_functions
-install_cloudflared
